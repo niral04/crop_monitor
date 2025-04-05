@@ -5,7 +5,7 @@ import google.generativeai as genai
 
 # Load environment and configure Gemini
 load_dotenv()
-genai.configure(api_key=os.getenv("YOUR_API_KEY"))  # Replace with your API key
+genai.configure(api_key=os.getenv("AIzaSyCfYJgnXvw-x_V-ys9hp7Fh89IYIngzNgI"))  # Replace with your API key
 
 def get_gemini_repsonse(input, prompt):
     model = genai.GenerativeModel('gemini-1.5-flash')
@@ -46,19 +46,16 @@ st.markdown("""
             margin-bottom: 20px;
         }
 
-        /* Increase font size of labels */
         .stTextInput label, .stTextArea label {
             font-size: 20px !important;
             font-weight: 600;
         }
 
-        /* Input field font size */
         .stTextInput>div>div>input,
         .stTextArea>div>textarea {
             font-size: 16px;
         }
 
-        /* Analyze button style */
         .stButton button {
             background-color: #2ea44f !important;
             color: white !important;
@@ -84,32 +81,53 @@ st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
 data = st.text_area("Paste Crop Environmental Data (JSON or XML)", 
                     placeholder='{"temperature": 30, "humidity": 70, "soil_pH": 6.5, "sunlight": "moderate"}', 
                     height=150)
-st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
 
-# Button
-submit = st.button("Analyze Crop Data", type="primary", use_container_width=True)
+# Language selection
+language = st.radio("Select Language / भाषा निवडा", ["English", "मराठी"])
 
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Gemini prompt
-input_prompt = """
+# Prompts
+prompt_en = """
 Act as a Senior Farmer and Environmental Scientist. I am giving you some data in JSON or XML format which represents the environment for a crop. 
 Analyze it and tell whether it is suitable or not for the given crop.
 Use simple language and show the result in tabular form with columns:
 - Factor
 - Environmental data
 - Suitable Range
--Suitable?
+- Suitable?
 
 Also give bullet-point suggestions and a conclusion.
 The crop name is:
 """
 
-input = input_prompt + crop_name + " and the data is: " + data
+prompt_marathi = """
+तुम्ही एक अनुभवी शेतकरी आणि पर्यावरणतज्ञ आहात. खाली दिलेले JSON किंवा XML स्वरूपातले डेटा वाचा, ज्यामध्ये पीकासाठी हवामानाची माहिती दिली आहे.
+हा डेटा योग्य आहे का ते सुलभ भाषेत समजावून सांगा. खालील स्वरूपात टेबल वापरा:
+- घटक (Factor)
+- पर्यावरणीय माहिती (Environmental Data)
+- योग्य मर्यादा (Suitable Range)
+- योग्य आहे का? (Suitable?)
+
+यानंतर बुलेट पॉईंटमध्ये सुधारणा सुचवा आणि निष्कर्ष द्या.
+पीकाचे नाव आहे:
+"""
+
+# Button
+submit = st.button("Analyze Crop Data", type="primary", use_container_width=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Final prompt construction
+if language == "English":
+    input_prompt = prompt_en
+else:
+    input_prompt = prompt_marathi
+
+input_text = input_prompt + crop_name + " and the data is: " + data
 
 # Output
 if submit:
     with st.spinner("Analyzing Crop Data..."):
-        response = get_gemini_repsonse(input_prompt, input)
+        response = get_gemini_repsonse(input_prompt, input_text)
     st.subheader("Analysis Result:")
     st.write(response)
