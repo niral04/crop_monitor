@@ -97,9 +97,9 @@ Act as a Senior Farmer and Environmental Scientist. I am giving you some data in
 Analyze it and tell whether it is suitable or not for the given crop.
 Use simple language and show the result in tabular form with columns:
 - Factor
-- Actual Value from JSON
+- Environmental data
 - Suitable Range
-- Comments
+-Suitable?
 
 Also give bullet-point suggestions and a conclusion.
 The crop name is:
