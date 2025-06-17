@@ -5,7 +5,7 @@ import google.generativeai as genai
 
 # Load environment and configure Gemini
 load_dotenv()
-genai.configure(api_key=os.getenv("AIzaSyCfYJgnXvw-x_V-ys9hp7Fh89IYIngzNgI"))  # Replace with your API key
+genai.configure(api_key=os.getenv("AIzaSyD6qaDn_GnsfVyChH"))  # Replace with your API key
 
 def get_gemini_repsonse(input, prompt):
     model = genai.GenerativeModel('gemini-1.5-flash')
